@@ -9,6 +9,16 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './style.css';
 
 
+// TODO: 
+// 1. Раскраска ребер и вершин
+// 2. Наименование вершин и ребер (переименование дефолтных)
+// 
+//
+//
+//
+//
+
+
 interface IProps {
     is_graph_modified: boolean
 }
@@ -41,7 +51,7 @@ export class Template<T1, T2> extends Component<IProps, IState<T1, T2>> {
                     <div>
                         <div className={'MainRow'}>
                             <div id={"cy"} className={'GraphCell'}>
-                                <GraphController graph={this.state.graph} visualization_policy='circle'/>
+                                <GraphController graph={this.state.graph} visualization_policy='circle' is_nodeid_visible={true} is_weights_visible={true}/>
                             </div>
                             
                             <div className={'TaskCell'}>
@@ -49,7 +59,7 @@ export class Template<T1, T2> extends Component<IProps, IState<T1, T2>> {
                                 <Task/>
                             </div>
                             <div className={'ToolCell'}>
-                                <ToolBar next_stage={this.nextStage} base_button={true} graph_manipulations_button={this.props.is_graph_modified}/>
+                                <ToolBar next_stage={this.nextStage} base_button={true} graph_manipulations_button={this.props.is_graph_modified} graph_coloring_buttons={true}/>
                             </div>
                         </div>
                         <div className={'LeftBottom'}>
