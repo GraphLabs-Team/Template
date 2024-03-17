@@ -12,7 +12,7 @@ export class GraphGenerator {
     public static random<T1, T2>(n_vertex: number, p_connected: number, selfconn: boolean = false){
         let graph: Graph<T1, T2> = new Graph()
         for (let i = 0; i < n_vertex; i++){
-            let node: Node<T1> = new Node(i.toString(), i.toString())
+            let node: Node<T1> = new Node(i.toString(), i.toString(), "red")
             graph.addNode(node)
         }
         let edges_ids: number[] = [0]
@@ -26,7 +26,7 @@ export class GraphGenerator {
                             index = edges_ids[edges_ids.length - 1] + 1
                         }
                         edges_ids.push(index)
-                        let edge: Edge<T1, T2> = new Edge(index.toString(), node1, node2)
+                        let edge: Edge<T1, T2> = new Edge(index.toString(), node1, node2, "red", "weight")
                         graph.addEdge(edge)
                     }
                 }

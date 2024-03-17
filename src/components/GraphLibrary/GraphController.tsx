@@ -7,23 +7,61 @@ import { Edge } from './Edge';
 
 interface IGraphControllerProps<T1, T2> {
     graph: Graph<T1, T2>,
-    visualization_policy?: string
+    visualization_policy?: string,
+    is_nodeid_visible?: boolean,
+    is_weights_visible?: boolean,
 }
 
 
 export class GraphController<T1, T2> extends React.Component<IGraphControllerProps<T1, T2>> {
     
     cy?: cytoscape.Core
-    visualization_policy: string = "circle"
 
-    constructor(props: {graph: Graph<T1, T2>, visualization_policy?: string}){
-        super(props)
+    constructor(props: {graph: Graph<T1, T2>, visualization_policy?: string, 
+        is_nodeid_visible?: boolean, is_weights_visible?: boolean}){
+            super(props)
+    }
+
+    private getDefaultStylesheet() {
+
+        let styles = [
+            {
+                selector: "node[label]", 
+                style: {}
+            },
+            {
+                selector: "edge[label]", 
+                style: {}
+            },
+        ]
+
+        if (this.props.is_nodeid_visible){
+            styles[0].style = {
+                label: "data(label)",
+                "font-size": "18",
+            }            
+            // "background-color": "#527",
+        }
+
+        if (this.props.is_weights_visible){
+            styles[1].style = {
+                label: 'data(label)',
+                "font-size": "18",
+                "edge-text-rotation": "autorotate",
+                "color": "#fff",
+                "text-outline-color": "#000",
+                "text-outline-width": 3
+            }
+        }
+
+        return styles
     }
 
     componentDidMount() {        
         this.cy = cytoscape({container: document.getElementById('cy'),
                             layout: {name: this.props.visualization_policy ?? "circle"},
                             elements: this.props.graph.toJSONFormat(),
+                            style: this.getDefaultStylesheet()
         })
 
         document.getElementById("addNodeButton")?.addEventListener("click", this.addNode);
@@ -69,6 +107,18 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
                    
             }
         });
+
+        document.getElementById("recolorNodeButton")?.addEventListener("click", () => {            
+            let selected = this.cy?.nodes(":selected")
+            if (selected){                
+                selected.forEach(element => {
+                    let node = this.props.graph.getNode(element.id())
+                    let color = (document.getElementById("nodeColor") as HTMLInputElement).value
+                    node?.setColor(color)
+                    this.forceUpdate()
+                });
+            }
+        });
     }
 
     componentDidUpdate(prevProps: Readonly<IGraphControllerProps<T1, T2>>, prevState: Readonly<{}>, snapshot?: any): void {
@@ -76,6 +126,7 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
         this.cy = cytoscape({container: document.getElementById('cy'),
                             layout: {name: this.props.visualization_policy ?? "circle"},
                             elements: elms,
+                            style: this.getDefaultStylesheet()
                             
         })
     }

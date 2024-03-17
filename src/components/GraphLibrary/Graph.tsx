@@ -160,20 +160,30 @@ export class Graph<T1, T2> implements IGraph<T1, T2> {
             let dct = {
                 data: {
                     id: node.id.toString(),
-                    label: node.label
+                    label: node.label,
+                    color: node.color
                 }
             }
+            
             elements.push(dct)
         });
         this._edges.forEach(edge => {
             let dct = {
                 data: {
                     source: edge.source.id.toString(),
-                    target: edge.target.id.toString()
+                    target: edge.target.id.toString(),
+                    label: edge.label,
+                    color: edge.color
                 }
             }
             elements.push(dct)
         });
+
+        
+
+
         return elements
     }
+
+    
 }
