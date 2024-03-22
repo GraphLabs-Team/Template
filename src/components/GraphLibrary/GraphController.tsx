@@ -119,6 +119,35 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
                 });
             }
         });
+
+        document.getElementById("setNodeName")?.addEventListener("click", () => {            
+            let selected = this.cy?.nodes(":selected")
+            if (selected){                
+                selected.forEach(element => {
+                    let node = this.props.graph.getNode(element.id())
+                    let label = (document.getElementById("nodeNameInput") as HTMLInputElement).value
+                    node?.setLabel(label)
+                    this.forceUpdate()
+                });
+            }
+        });
+
+        document.getElementById("setEdgeWeight")?.addEventListener("click", () => {            
+            let selected = this.cy?.edges(":selected")
+            if (selected){                
+                selected.forEach(element => {
+                    let node_source = this.props.graph.getNode(element.source().id())
+                    let node_target = this.props.graph.getNode(element.target().id())
+                    if (node_source && node_target){
+                        let edge = this.props.graph.getEdge(node_source, node_target)
+                        let weight = (document.getElementById("edgeWeightInput") as HTMLInputElement).value
+                        console.log(edge)
+                        edge?.setLabel(weight)
+                        this.forceUpdate()
+                    }
+                });
+            }
+        });
     }
 
     componentDidUpdate(prevProps: Readonly<IGraphControllerProps<T1, T2>>, prevState: Readonly<{}>, snapshot?: any): void {
