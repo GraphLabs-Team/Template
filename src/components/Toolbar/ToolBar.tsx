@@ -33,7 +33,7 @@ export class ToolBar extends React.Component<IToolBarProps> {
             button_list.push(<button id="recolorNodeButton" className={"toolButton"} type="button">Перекрасить вершину</button>)
         }
         if (true){
-            button_list.push(<input type="number" id="nodeNameInput" name="nodeName"/>)
+            button_list.push(<input type="string" id="nodeNameInput" name="nodeName"/>)
             button_list.push(<button id="setNodeName" className={"toolButton"} type="button">Переименовать вершину</button>)
             button_list.push(<input type="number" id="edgeWeightInput" name="edgeWeight"/>)
             button_list.push(<button id="setEdgeWeight" className={"toolButton"} type="button">Назначить вес дуге</button>)
@@ -44,7 +44,6 @@ export class ToolBar extends React.Component<IToolBarProps> {
 
     private getFooterButtons(){
         return <button id="compleateModule" className={"compleateButton"} type="button" onClick={this.props.next_stage}>Далее</button>
-        
     }
 
     render(): React.ReactNode {

@@ -57,12 +57,21 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
         return styles
     }
 
-    componentDidMount() {        
+    private update_layout(){
+        if (this.cy){
+            this.props.graph.nodes.forEach(node => {
+                this.cy?.nodes("node#" + node.id)[0].css({'background-color': node.color})
+            });
+        }
+    }
+
+    componentDidMount() {             
         this.cy = cytoscape({container: document.getElementById('cy'),
                             layout: {name: this.props.visualization_policy ?? "circle"},
                             elements: this.props.graph.toJSONFormat(),
                             style: this.getDefaultStylesheet()
         })
+        this.update_layout()
 
         document.getElementById("addNodeButton")?.addEventListener("click", this.addNode);
         
@@ -85,7 +94,7 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
                 let node1 = this.props.graph.getNode(first)
                 let node2 = this.props.graph.getNode(second)
                 if (node1 && node2) {
-                    let edge12: Edge<T1, T2> = new Edge(this.getNewEdgeId(), node1, node2)
+                    let edge12: Edge<T1, T2> = new Edge(this.getNewEdgeId(), node1, node2, "", "0")
                     this.props.graph.addEdge(edge12)
                     this.forceUpdate()
                 }
@@ -141,7 +150,6 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
                     if (node_source && node_target){
                         let edge = this.props.graph.getEdge(node_source, node_target)
                         let weight = (document.getElementById("edgeWeightInput") as HTMLInputElement).value
-                        console.log(edge)
                         edge?.setLabel(weight)
                         this.forceUpdate()
                     }
@@ -158,6 +166,7 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
                             style: this.getDefaultStylesheet()
                             
         })
+        this.update_layout()
     }
 
     addNode = () => {
