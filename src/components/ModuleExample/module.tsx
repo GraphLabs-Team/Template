@@ -13,4 +13,33 @@ export class ModuleExample<T1, T2> extends Template<T1, T2> {
         let graph: Graph<T1, T2> = GraphGenerator.random(5, 0.3)
         return graph
     }
+
+    protected override isGraphModified(){
+        return true
+    }
+    
+    protected override isGraphRepainted(){
+        return true
+    }
+    
+    protected override isGraphNodeRenamed(){
+        return true
+    }
+    
+    protected override isGraphReweight(){
+        return true
+    }
+
+    protected isVisualizingPolicyChangeble(){
+        return true
+    }
+    
+    protected override isNodeNameVisible(){
+        return true
+    }
+
+    protected override isEdgeWeightVisible(){
+        return true
+    }
+
 }

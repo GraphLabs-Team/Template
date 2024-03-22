@@ -1,9 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import CytoscapeComponent from 'react-cytoscapejs';
 import { Graph } from './Graph';
 import { Node } from './Node';
-import cytoscape from 'cytoscape';
 import { Edge } from './Edge';
 
 
