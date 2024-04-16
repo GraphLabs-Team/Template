@@ -3,7 +3,7 @@ import React from 'react';
 
 interface INodeProps<T> {
     id: string
-    label: string
+    label: string | null
     color?: string
     props?: T
 }
@@ -11,11 +11,11 @@ interface INodeProps<T> {
 
 export class Node<T> implements INodeProps<T> {
     private _id: string;
-    private _label: string;
+    private _label: string | null;
     private _color?: string;
     private _props?: T;
 
-    constructor(id: string, label: string, color?: string, props?: T) {
+    constructor(id: string, label: string | null, color?: string, props?: T) {
         this._id = id
         this._label = label
         this._color = color
@@ -42,7 +42,7 @@ export class Node<T> implements INodeProps<T> {
         this._color = color
     }
 
-    public setLabel(label: string){
+    public setLabel(label: string | null){
         this._label = label
     }
 }

@@ -1,6 +1,8 @@
 import {Component, FC} from 'react';
 import TaskTimer from '../TaskTimer/index';
 import { Graph } from '../GraphLibrary/Graph';
+import  Matrix  from '../MatrixLibrary/Matrix';
+import { MatrixController } from '../MatrixLibrary/MatrixController';
 import cytoscape from 'cytoscape';
 import { GraphGenerator } from '../GraphLibrary/GraphGenerator';
 import { GraphController } from '../GraphLibrary/GraphController';
@@ -16,21 +18,22 @@ interface IProps {
 
 interface IState<T1, T2> {
     graph: Graph<T1, T2>;
+    task_graph: Graph<T1, T2>;
 }
 
 
 export class Template<T1, T2> extends Component<IProps, IState<T1, T2>> {
     
-    cy?: cytoscape.Core
     visualizing_policy = "circle"
 
     constructor(props: IProps){
         super(props);
 
         let g: Graph<T1, T2> = this.generateGraph()
+        let t_g: Graph<T1, T2> = this.generateTaskGraph()
         this.state = {
             graph: g,
-            
+            task_graph: t_g,
         }
     }
 
@@ -42,24 +45,42 @@ export class Template<T1, T2> extends Component<IProps, IState<T1, T2>> {
                 {(
                     <div>
                         <div className={'MainRow'}>
-                            <div id={"cy"} className={'GraphCell'}>
+                            {this.isGraphModule() &&
                                 <GraphController 
+                                    id={"cy1"}
+                                    className='GraphCell'
                                     graph={this.state.graph} 
                                     visualization_policy={this.visualizing_policy}
                                     is_nodeid_visible={this.isNodeNameVisible()} 
                                     is_weights_visible={this.isEdgeWeightVisible()}/>
-                            </div>
-                            
-                            <div className={'TaskCell'}>
+                            }
+                            {!this.isGraphModule() &&
+                                <div id={"matrix"} className={'GraphCell'}>
+                                    <MatrixController
+                                    matrix={this.generateMatrix()}/>                                                                   
+                                </div>   
+                            }                        
+                            <div id={"drtfghbjk"} className={'TaskCell'}>
                                 <p>Задание</p>
-                                <Task/>
+                                <Task/>                               
+                            </div>
+                            <div id={"drtfghbjk"} className={'TaskCellGraph'}>
+                            <GraphController 
+                                    id={"cy2"}
+                                    className='TaskCellGraph'
+                                    graph={this.state.task_graph} 
+                                    visualization_policy={this.visualizing_policy}
+                                    is_nodeid_visible={this.isNodeNameVisible()} 
+                                    is_weights_visible={this.isEdgeWeightVisible()}/>                              
                             </div>
                             <div className={'ToolCell'}>
                                 <ToolBar 
                                     next_stage={this.nextStage} 
-                                    base_button={true} 
+                                    base_button={true}
+                                    base_button_message={this.helpMessage()}
                                     graph_manipulations_button={this.isGraphModified()} 
-                                    graph_coloring_buttons={this.isGraphRepainted()} 
+                                    graph_coloring_buttons={this.isGraphRepainted()}
+                                    graph_adj_coloring_buttons={this.isGraphAdjRepainted()} 
                                     graph_naming_buttons={this.isGraphNodeRenamed()}
                                     graph_weight_buttons={this.isGraphReweight()}
                                     change_visualization_policy_buttons={this.isVisualizingPolicyChangeble()}
@@ -79,6 +100,10 @@ export class Template<T1, T2> extends Component<IProps, IState<T1, T2>> {
         console.log("next stage")
     }
 
+    protected helpMessage() {
+        return "Good luck!"
+    }
+
     protected task(){
         return () => <p>Это пустой компонент задания</p>;
     }
@@ -88,10 +113,27 @@ export class Template<T1, T2> extends Component<IProps, IState<T1, T2>> {
         return graph
     }
 
+    protected generateTaskGraph(){
+        let task_graph: Graph<T1, T2> = GraphGenerator.random(5, 0.3)
+        return task_graph
+    }
+
+    protected isGraphModule(){
+        return true
+    }
+
+    protected generateMatrix(){
+        let matrix: Matrix = new Matrix(1, 1, [])
+        return matrix
+    }
+
     protected isGraphModified(){
         return true
     }
     protected isGraphRepainted(){
+        return true
+    }
+    protected isGraphAdjRepainted(){
         return true
     }
     protected isGraphNodeRenamed(){

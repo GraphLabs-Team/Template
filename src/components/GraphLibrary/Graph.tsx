@@ -65,11 +65,37 @@ export class Graph<T1, T2> implements IGraph<T1, T2> {
     }
 
     public getNode(node_id: string){
+
         for (let i = 0; i < this._nodes.length; i++){
             if (this._nodes[i].id === node_id){
                 return this._nodes[i]
             }
         }
+    }
+
+    public getAdjNodes(node: Node<T1>){
+        let adj_nodes: Node<T1>[] = []
+        let output_edges = this.getOutputEdge(node)
+        for (let i = 0; i < output_edges.length; i++){
+            if (output_edges[i].source.id === node.id){
+                adj_nodes.push(output_edges[i].target)
+            }
+            else{
+                adj_nodes.push(output_edges[i].source)
+            }                
+        }
+        return adj_nodes
+    }
+
+    public getAdjEdges(edge: Edge<T1, T2>){
+        let adj_edges: Edge<T1, T2>[] = []
+        for (let i = 0; i < this._edges.length; i++){
+            if ((this._edges[i].source.id === edge.source.id || this._edges[i].source.id === edge.target.id ||
+                this._edges[i].target.id === edge.source.id || this._edges[i].target.id === edge.target.id) && this._edges[i].id !== edge.id){
+                adj_edges.push(this._edges[i])
+            }                
+        }
+        return adj_edges
     }
     
     public getEdge(edgeid_or_source: string | Node<T1>, target?: Node<T1>){

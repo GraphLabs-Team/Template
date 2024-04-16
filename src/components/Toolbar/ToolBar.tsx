@@ -5,8 +5,10 @@ import './ToolBar.css';
 
 interface IToolBarProps{
     base_button: boolean,
+    base_button_message: string,
     graph_manipulations_button?: boolean,
     graph_coloring_buttons?: boolean,
+    graph_adj_coloring_buttons?: boolean,
     graph_naming_buttons?: boolean
     graph_weight_buttons?: boolean
     change_visualization_policy_buttons?: boolean
@@ -18,6 +20,13 @@ export class ToolBar extends React.Component<IToolBarProps> {
     constructor(props: IToolBarProps){
             super(props)
     }
+
+
+     componentDidMount(): void {         
+        document.getElementById("getHelp")?.addEventListener("click", () => {            
+            alert(this.props.base_button_message);
+          })
+     }
 
     private getToolButtons(){
         let button_list = []
@@ -32,15 +41,19 @@ export class ToolBar extends React.Component<IToolBarProps> {
             button_list.push(<button id="deleteEdgeButton" className={"toolButton"} type="button">Удалить ребро</button>)
         }
         if (this.props.graph_coloring_buttons){
-            button_list.push(<input type="color" id="nodeColor" name="nodeColor"/>)
-            button_list.push(<button id="recolorNodeButton" className={"toolButton"} type="button">Перекрасить вершину</button>)
+            button_list.push(<input type="color" id="nodeColor" className="colorInput" name="nodeColor"/>)
+            button_list.push(<button id="recolorNodeButton" className={"toolButton"} type="button">Раскрасить вершину</button>)
+            button_list.push(<button id="recolorEdgeButton" className={"toolButton"} type="button">Раскрасить ребро</button>)
+        }
+        if (this.props.graph_adj_coloring_buttons){
+            button_list.push(<button id="colorAdjNodeButton" className={"toolButton"} type="button">Выделить смежные вершины</button>)
+            button_list.push(<button id="colorAdjEdgeButton" className={"toolButton"} type="button">Выделить смежные рёбра</button>)
+            button_list.push(<button id="uncolorNodeButton" className={"toolButton"} type="button">Убрать выделение</button>)
         }
         if (this.props.graph_naming_buttons){
-            button_list.push(<input type="string" id="nodeNameInput" name="nodeName"/>)
             button_list.push(<button id="setNodeName" className={"toolButton"} type="button">Переименовать вершину</button>)
         }
         if (this.props.graph_weight_buttons){
-            button_list.push(<input type="number" id="edgeWeightInput" name="edgeWeight"/>)
             button_list.push(<button id="setEdgeWeight" className={"toolButton"} type="button">Назначить вес дуге</button>)
         }
         if (this.props.change_visualization_policy_buttons){
@@ -62,6 +75,9 @@ export class ToolBar extends React.Component<IToolBarProps> {
     private getFooterButtons(){
         return <button id="compleateModule" className={"compleateButton"} type="button">Далее</button>
     }
+
+    
+
 
     render(): React.ReactNode {
         let tool_buttons = this.getToolButtons()
