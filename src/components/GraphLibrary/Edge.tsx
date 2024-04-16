@@ -6,7 +6,7 @@ interface IEdgeProps<T1, T2> {
     source: Node<T1>
     target: Node<T1>
     color?: string
-    label?: string
+    label?: string | null
     props?: T2
 }
 
@@ -16,10 +16,10 @@ export class Edge<T1, T2> implements IEdgeProps<T1, T2> {
     private _source: Node<T1>;
     private _target: Node<T1>;
     private _color?: string;
-    private _label?: string;
+    private _label?: string | null;
     private _props?: T2;
 
-    constructor(id: string, source: Node<T1>, target: Node<T1>, color?: string, label?: string, props?: T2) {
+    constructor(id: string, source: Node<T1>, target: Node<T1>, color?: string, label?: string | null, props?: T2) {
         this._id = id
         this._source = source
         this._target = target
@@ -56,7 +56,7 @@ export class Edge<T1, T2> implements IEdgeProps<T1, T2> {
         this._color = color
     }
 
-    public setLabel(label: string){
+    public setLabel(label: string | null){
         this._label = label
     }
 }

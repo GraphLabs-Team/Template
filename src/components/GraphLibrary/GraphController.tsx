@@ -6,6 +6,8 @@ import { Edge } from './Edge';
 
 
 interface IGraphControllerProps<T1, T2> {
+    id: string,
+    className: string,
     graph: Graph<T1, T2>,
     visualization_policy?: string,
     is_nodeid_visible?: boolean,
@@ -17,8 +19,7 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
     
     cy?: cytoscape.Core
 
-    constructor(props: {graph: Graph<T1, T2>, visualization_policy?: string, 
-        is_nodeid_visible?: boolean, is_weights_visible?: boolean}){
+    constructor(props: IGraphControllerProps<T1,T2>){
             super(props)
     }
 
@@ -61,18 +62,24 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
         if (this.cy){
             this.props.graph.nodes.forEach(node => {
                 this.cy?.nodes("node#" + node.id)[0].css({'background-color': node.color})
+                console.log("Node", node.id, node.color)
+            });
+            this.props.graph.edges.forEach(edge => {
+                this.cy?.edges('[source = "'+ edge.source.id + '"][target = "' + edge.target.id  + '"]').style({'line-color': edge.color})
+                console.log("Edge", edge.id, edge.color)
             });
         }
     }
 
     componentDidMount() {             
-        this.cy = cytoscape({container: document.getElementById('cy'),
+        this.cy = cytoscape({container: document.getElementById(this.props.id),
                             layout: {name: this.props.visualization_policy ?? "circle"},
                             elements: this.props.graph.toJSONFormat(),
                             style: this.getDefaultStylesheet()
         })
         this.update_layout()
 
+ 
         document.getElementById("addNodeButton")?.addEventListener("click", this.addNode);
         
         document.getElementById("deleteNodeButton")?.addEventListener("click", () => {
@@ -129,12 +136,72 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
             }
         });
 
+        document.getElementById("recolorEdgeButton")?.addEventListener("click", () => {            
+            let selected = this.cy?.edges(":selected")
+            if (selected){                
+                selected.forEach(element => {
+                    let node_source = this.props.graph.getNode(element.source().id())
+                    let node_target = this.props.graph.getNode(element.target().id())
+                    if (node_source && node_target){
+                        let edge = this.props.graph.getEdge(node_source, node_target)
+                        let color = (document.getElementById("nodeColor") as HTMLInputElement).value
+                        edge?.setColor(color)
+                        this.forceUpdate()
+                    }
+                });
+            }
+        });
+
+        document.getElementById("colorAdjNodeButton")?.addEventListener("click", () => {    
+            let selected = this.cy?.nodes(":selected")[0];
+            if (selected){         
+                let node = this.props.graph.getNode(selected.id())
+                if (node){
+                    let adj_nodes = this.props.graph.getAdjNodes(node)
+                    adj_nodes.forEach(node =>{
+                        node.setColor("red")
+                        this.forceUpdate()
+                    })
+                }
+            }
+        });
+
+        document.getElementById("colorAdjEdgeButton")?.addEventListener("click", () => {    
+            let selected = this.cy?.edges(":selected")[0];
+            if (selected){                
+                let source = this.props.graph.getNode(selected.source().id())
+                let target = this.props.graph.getNode(selected.target().id())
+                if (source && target){
+                    let edge = this.props.graph.getEdge(source, target)
+                    if (edge){
+                        let adj_edges = this.props.graph.getAdjEdges(edge)
+                        adj_edges.forEach(edge =>{
+                            edge.setColor("red")
+                            this.forceUpdate()
+                        })
+                    }
+                }                   
+            }
+        });
+
+        document.getElementById("uncolorNodeButton")?.addEventListener("click", () => {    
+            this.props.graph.nodes.forEach(node => {
+                node.setColor(" ")
+                this.forceUpdate()
+            })
+            this.props.graph.edges.forEach(edge => {
+                edge.setColor(" ")
+                this.forceUpdate()
+            })
+        });
+
         document.getElementById("setNodeName")?.addEventListener("click", () => {            
             let selected = this.cy?.nodes(":selected")
             if (selected){                
                 selected.forEach(element => {
                     let node = this.props.graph.getNode(element.id())
-                    let label = (document.getElementById("nodeNameInput") as HTMLInputElement).value
+                    // let label = (document.getElementById("nodeNameInput") as HTMLInputElement).value
+                    let label = prompt("Введите имя вершины", "");
                     node?.setLabel(label)
                     this.forceUpdate()
                 });
@@ -149,7 +216,8 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
                     let node_target = this.props.graph.getNode(element.target().id())
                     if (node_source && node_target){
                         let edge = this.props.graph.getEdge(node_source, node_target)
-                        let weight = (document.getElementById("edgeWeightInput") as HTMLInputElement).value
+                        // let weight = (document.getElementById("edgeWeightInput") as HTMLInputElement).value
+                        let weight = prompt("Введите вес ребра", "");
                         edge?.setLabel(weight)
                         this.forceUpdate()
                     }
@@ -160,7 +228,7 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
 
     componentDidUpdate(prevProps: Readonly<IGraphControllerProps<T1, T2>>, prevState: Readonly<{}>, snapshot?: any): void {
         let elms = this.props.graph.toJSONFormat();
-        this.cy = cytoscape({container: document.getElementById('cy'),
+        this.cy = cytoscape({container: document.getElementById(this.props.id),
                             layout: {name: this.props.visualization_policy ?? "circle"},
                             elements: elms,
                             style: this.getDefaultStylesheet()
@@ -213,7 +281,7 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
     }
 
     render() {
-        return <div id="cy"></div>
+        return <div id={this.props.id} className={this.props.className}></div>
     }
 
 }

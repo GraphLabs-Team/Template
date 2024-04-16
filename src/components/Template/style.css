@@ -15,15 +15,11 @@
   }
   
   .BorderedDiv {
-    /* box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5); */
     border-radius: 10px;
     background: #fffaf0;
   }
   
   .GraphCell {
-    /* box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5); */
     border: black;
     border-radius: 10px;
     background-color: #ebf2fa;
@@ -35,52 +31,46 @@
   }
   
   .ToolCell   {
-    /* box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5); */
     border-radius: 10px;
     background-color: #ebf2fa;
     position: fixed;
     left: 1%;
     top: 1%;
     width: 12%;
-    height: 78%;
+    height: 87%;
   }
   
-  .TaskCell  {
-    /* box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5); */
+  .TaskCellGraph  {
+    border-radius: 10px;
+    background-color: #ebf2fa;
+    position: fixed;
+    left: 79%;
+    top: 20%;
+    width: 20%;
+    height: 79%;
+  }
+
+  .TaskCell {
     border-radius: 10px;
     background-color: #ebf2fa;
     position: fixed;
     left: 79%;
     top: 1%;
     width: 20%;
-    height: 98%;
+    height: 18%;
   }
   
   .LeftBottom   {
-    /* box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5); */
     border-radius: 10px;
     border-color: black;
     background-color: #ebf2fa;
     position: fixed;
     left: 1%;
-    top: 80%;
+    top: 89%;
     width: 12%;
-    height: 19%;
+    height: 10%;
     text-align: center;
   }
   
-  .LowRow   {
-    /* box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5);
-    -webkit-box-shadow:2px 2px 11px rgba(0, 0, 0, 0.5); */
-    border-radius: 10px;
-    background-color: #ebf2fa;
-    position: fixed;
-    left: 15%;
-    top: 80%;
-    width: 84%;
-    height: 19%;
-  }
+
   
