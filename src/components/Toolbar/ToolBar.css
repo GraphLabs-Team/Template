@@ -43,3 +43,8 @@ button.compleateButton {
     overflow: hidden
 }
 
+.visualPolicy {
+    margin-top: 5px;
+    width: 175px;
+    height: 40px;
+}
