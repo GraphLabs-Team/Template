@@ -12,6 +12,8 @@ interface IGraphControllerProps<T1, T2> {
     visualization_policy?: string,
     is_nodeid_visible?: boolean,
     is_weights_visible?: boolean,
+    is_weights_node_visible?: boolean,
+    on_weights_changed?: ()=>void,
 }
 
 
@@ -34,6 +36,10 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
                 selector: "edge[label]", 
                 style: {}
             },
+            /*{
+                selector: "node[weight]",
+                style: {}
+            }*/
         ]
 
         if (this.props.is_nodeid_visible){
@@ -55,6 +61,17 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
             }
         }
 
+        /*if (this.props.is_weights_node_visible){
+            styles[2].style = {
+                weight: 'data(weight)',
+                "font-size": "18",
+                "edge-text-rotation": "autorotate",
+                "color": "#f2f",
+                "text-outline-color": "#000",
+                "text-outline-width": 3
+            }
+        }*/
+
         return styles
     }
 
@@ -62,6 +79,7 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
         if (this.cy){
             this.props.graph.nodes.forEach(node => {
                 this.cy?.nodes("node#" + node.id)[0].css({'background-color': node.color})
+                //console.log("Node", node.id, node.color, node.weight)
                 console.log("Node", node.id, node.color)
             });
             this.props.graph.edges.forEach(edge => {
@@ -222,6 +240,40 @@ export class GraphController<T1, T2> extends React.Component<IGraphControllerPro
                         this.forceUpdate()
                     }
                 });
+            }
+        });
+
+        document.getElementById("setNodeWeight")?.addEventListener("click", () => {            
+            let selected = this.cy?.nodes(":selected")
+            if (selected){                
+                selected.forEach(element => {
+                    let node = this.props.graph.getNode(element.id())
+                    let weight = prompt("Введите вес вершины", "");
+                    node?.setWeight(weight)
+                    this.forceUpdate()
+                    }
+                );
+                if (this.props.on_weights_changed != null) {
+                    this.props.on_weights_changed()
+                }
+            }
+        });
+        document.getElementById("writeNodeWeight")?.addEventListener("click", () => {            
+            let selected = this.cy?.nodes(":selected")
+            if (selected){                
+                selected.forEach(element => {
+                    let node = this.props.graph.getNode(element.id())
+                    //alert("вес вершины ");
+                    let weight = node?.weight
+                    if (weight){
+                        let s = "вес вершины: "
+                        alert(s + weight)
+                    }
+                    else{
+                        alert("вес вершины null")
+                    }
+                    }
+                );
             }
         });
     }

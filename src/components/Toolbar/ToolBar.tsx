@@ -11,6 +11,7 @@ interface IToolBarProps{
     graph_adj_coloring_buttons?: boolean,
     graph_naming_buttons?: boolean
     graph_weight_buttons?: boolean
+    node_weight_buttons?: boolean
     change_visualization_policy_buttons?: boolean
     next_stage: () => void,
 }
@@ -56,9 +57,13 @@ export class ToolBar extends React.Component<IToolBarProps> {
         if (this.props.graph_weight_buttons){
             button_list.push(<button id="setEdgeWeight" className={"toolButton"} type="button">Назначить вес дуге</button>)
         }
+        if (this.props.node_weight_buttons){
+            button_list.push(<button id="setNodeWeight" className={"toolButton"} type="button">Назначить вес вершине</button>)
+            button_list.push(<button id="writeNodeWeight" className={"toolButton"} type="button">Просмотреть вес вершины</button>)
+        }
         if (this.props.change_visualization_policy_buttons){
             button_list.push(
-                <select name="visualization-policy" id="visualization-policy">
+                <select name="visualization-policy" id="visualization-policy" className='visualPolicy'>
                     <option value="circle">circle</option>
                     <option value="grid">grid</option>
                     <option value="random">random</option>
