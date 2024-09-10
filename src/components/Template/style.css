@@ -45,9 +45,9 @@
     background-color: #ebf2fa;
     position: fixed;
     left: 79%;
-    top: 20%;
+    top: 30%;
     width: 20%;
-    height: 79%;
+    height: 69%;
   }
 
   .TaskCell {
@@ -57,7 +57,7 @@
     left: 79%;
     top: 1%;
     width: 20%;
-    height: 18%;
+    height: 28%;
   }
   
   .LeftBottom   {
@@ -72,5 +72,19 @@
     text-align: center;
   }
   
+  .table
+  {
+    table {
+   border: 1px solid grey;
+}
+/* границы ячеек первого ряда таблицы */
+th {
+   border: 1px solid grey;
+}
+/* границы ячеек тела таблицы */
+td {
+   border: 1px solid grey;
+}
+  }
 
   

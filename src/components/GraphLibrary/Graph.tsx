@@ -187,7 +187,8 @@ export class Graph<T1, T2> implements IGraph<T1, T2> {
                 data: {
                     id: node.id.toString(),
                     label: node.label,
-                    color: node.color
+                    color: node.color,
+                    weight: node.weight
                 }
             }
             
